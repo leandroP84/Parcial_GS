@@ -1,0 +1,230 @@
+{
+  "info": {
+    "name": "SmartCV IA API",
+    "description": "Colección Postman para probar la API de SmartCV IA.\n\nUsuarios demo:\n- demo@smartcv.com / demo123 (USER)\n- admin@smartcv.com / admin123 (ADMIN)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Demo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@smartcv.com\",\n  \"password\": \"demo123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('token', pm.response.json().token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@smartcv.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Test\",\n  \"apellido\": \"Usuario\",\n  \"email\": \"test@example.com\",\n  \"password\": \"test123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Perfil",
+      "item": [
+        {
+          "name": "GET Perfil",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/perfil"
+          }
+        },
+        {
+          "name": "PUT Perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resumenProfesional\": \"Desarrollador apasionado por la IA.\",\n  \"telefono\": \"+54 11 1234-5678\",\n  \"linkedin\": \"https://linkedin.com/in/miperfil\",\n  \"github\": \"https://github.com/miperfil\"\n}"
+            },
+            "url": "{{baseUrl}}/perfil"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Experiencias",
+      "item": [
+        {
+          "name": "GET All",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/experiencias"
+          }
+        },
+        {
+          "name": "POST Experiencia",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"empresa\": \"Mi Empresa\",\n  \"cargo\": \"Desarrollador\",\n  \"fechaInicio\": \"2023-01-01\",\n  \"fechaFin\": null,\n  \"descripcion\": \"Desarrollo de APIs REST\"\n}"
+            },
+            "url": "{{baseUrl}}/experiencias"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Educación",
+      "item": [
+        {
+          "name": "GET All",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/educaciones"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Habilidades",
+      "item": [
+        {
+          "name": "GET All",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/habilidades"
+          }
+        },
+        {
+          "name": "POST Habilidad",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"TypeScript\",\n  \"nivel\": \"INTERMEDIO\"\n}"
+            },
+            "url": "{{baseUrl}}/habilidades"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "GET Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/dashboard/stats"
+          }
+        }
+      ]
+    },
+    {
+      "name": "IA",
+      "item": [
+        {
+          "name": "POST Analizar CV",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/ai/analyze-cv"
+          }
+        },
+        {
+          "name": "POST Generar Carta",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"puestoObjetivo\": \"Desarrollador Full Stack\",\n  \"empresaObjetivo\": \"TechCorp\"\n}"
+            },
+            "url": "{{baseUrl}}/ai/generate-cover-letter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "GET Users (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/users"
+          }
+        }
+      ]
+    }
+  ]
+}
